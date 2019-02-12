@@ -106,16 +106,31 @@ public class QueenBoard {
         if (!isValidBoard()) {
             throw new IllegalStateException("Board should not start with any non-zero value");
         }
-        int numSolutions = 0;
-        for (int row = 0, col = 0; row < board.length; row++) {
-            addQueen(row, col);
-            if (isSolvable(col + 1)) {
-                numSolutions++;
+        return solutions(0, 0);
+//        int numSolutions = 0;
+//        for (int row = 0, col = 0; row < board.length; row++) {
+//            addQueen(row, col);
+//            if (isSolvable(col + 1)) {
+//                numSolutions++;
+//            }
+//            removeQueen(row, col);
+//        }
+//        
+//        return numSolutions;
+    }
+    
+    private int solutions(int col, int solutions) {
+        if (col == board.length) {
+            return solutions + 1;
+        } else {
+            for (int row = 0; row < board.length; row++) {
+                if (addQueen(row, col)) {
+                    solutions = solutions(col + 1, solutions);
+                }
+                removeQueen(row, col);
             }
-            removeQueen(row, col);
+            return solutions;
         }
-        
-        return numSolutions;
     }
 
     private boolean isValidBoard() {
@@ -140,7 +155,8 @@ public class QueenBoard {
     
     public static void main(String...args) {
 //      QueenBoard q = new QueenBoard(Integer.parseInt(args[0]));
-      QueenBoard q = new QueenBoard(28);
+      QueenBoard q = new QueenBoard(14);
+      System.out.println(q.toString());
       System.out.println(q.solve());
       System.out.println(q.toString());
       q.clearBoard();
